@@ -1,4 +1,4 @@
-# benchmark [![Build Status](https://travis-ci.com/ef-ds/benchmark.svg?branch=master)](https://travis-ci.com/ef-ds/benchmark)
+# benchmark [![Build Status](https://travis-ci.com/ef-ds/benchmark.svg?branch=master)](https://travis-ci.com/ef-ds/benchmark)[![Go Report Card](https://goreportcard.com/badge/github.com/ef-ds/benchmark)](https://goreportcard.com/report/github.com/ef-ds/benchmark)  [![GoDoc](https://godoc.org/github.com/ef-ds/benchmark?status.svg)](https://godoc.org/github.com/ef-ds/benchmark)
 
 Package benchmark contains generic data structure benchmark tests.
 
