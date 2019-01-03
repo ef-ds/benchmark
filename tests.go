@@ -18,7 +18,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-// Package benchmark contains generic data structure benchmark tests.
+// Package benchmark contains benchmark tests targetted to test the performance
+// and efficiency of data structures.
 package benchmark
 
 import (
