@@ -38,7 +38,7 @@ func (t *Benchmark) Fill(b *testing.B, initInstance func(), push func(v interfac
 			for n := 0; n < b.N; n++ {
 				initInstance()
 				for i := 0; i < test.count; i++ {
-					push(getTestValue(i))
+					push(GetTestValue(i))
 				}
 				for !empty() {
 					tmp, tmp2 = pop()
@@ -64,7 +64,7 @@ func (t *Benchmark) Refill(b *testing.B, initInstance func(), push func(v interf
 			for n := 0; n < b.N; n++ {
 				for n := 0; n < refillCount; n++ {
 					for i := 0; i < test.count; i++ {
-						push(getTestValue(i))
+						push(GetTestValue(i))
 					}
 					for !empty() {
 						tmp, tmp2 = pop()
@@ -82,7 +82,7 @@ func (t *Benchmark) Refill(b *testing.B, initInstance func(), push func(v interf
 func (t *Benchmark) RefillFull(b *testing.B, initInstance func(), push func(v interface{}), pop func() (interface{}, bool), empty func() bool) {
 	initInstance()
 	for i := 0; i < fillCount; i++ {
-		push(getTestValue(i))
+		push(GetTestValue(i))
 	}
 
 	for i, test := range tests {
@@ -96,7 +96,7 @@ func (t *Benchmark) RefillFull(b *testing.B, initInstance func(), push func(v in
 			for n := 0; n < b.N; n++ {
 				for k := 0; k < refillCount; k++ {
 					for i := 0; i < test.count; i++ {
-						push(getTestValue(i))
+						push(GetTestValue(i))
 					}
 					for i := 0; i < test.count; i++ {
 						tmp, tmp2 = pop()
@@ -118,7 +118,7 @@ func (t *Benchmark) SlowDecrease(b *testing.B, initInstance func(), push func(v 
 	for _, test := range tests {
 		items := test.count / 2
 		for i := 0; i <= items; i++ {
-			push(getTestValue(i))
+			push(GetTestValue(i))
 		}
 	}
 
@@ -131,7 +131,7 @@ func (t *Benchmark) SlowDecrease(b *testing.B, initInstance func(), push func(v 
 		b.Run(strconv.Itoa(test.count), func(b *testing.B) {
 			for n := 0; n < b.N; n++ {
 				for i := 0; i < test.count; i++ {
-					push(getTestValue(i))
+					push(GetTestValue(i))
 					tmp, tmp2 = pop()
 					if !empty() {
 						tmp, tmp2 = pop()
@@ -160,8 +160,8 @@ func (t *Benchmark) SlowIncrease(b *testing.B, initInstance func(), push func(v 
 			for n := 0; n < b.N; n++ {
 				initInstance()
 				for i := 0; i < test.count; i++ {
-					push(getTestValue(i))
-					push(getTestValue(i))
+					push(GetTestValue(i))
+					push(GetTestValue(i))
 					tmp, tmp2 = pop()
 				}
 				for !empty() {
@@ -177,7 +177,7 @@ func (t *Benchmark) SlowIncrease(b *testing.B, initInstance func(), push func(v 
 func (t *Benchmark) Stable(b *testing.B, initInstance func(), push func(v interface{}), pop func() (interface{}, bool), empty func() bool) {
 	initInstance()
 	for i := 0; i < fillCount; i++ {
-		push(getTestValue(i))
+		push(GetTestValue(i))
 	}
 
 	for i, test := range tests {
@@ -189,7 +189,7 @@ func (t *Benchmark) Stable(b *testing.B, initInstance func(), push func(v interf
 		b.Run(strconv.Itoa(test.count), func(b *testing.B) {
 			for n := 0; n < b.N; n++ {
 				for i := 0; i < test.count; i++ {
-					push(getTestValue(i))
+					push(GetTestValue(i))
 					tmp, tmp2 = pop()
 				}
 
@@ -212,14 +212,14 @@ func (t *Benchmark) Microservice(b *testing.B, initInstance func(), push func(v 
 
 				// Simulate stable traffic
 				for i := 0; i < test.count; i++ {
-					push(getTestValue(i))
+					push(GetTestValue(i))
 					pop()
 				}
 
 				// Simulate slowly increasing traffic
 				for i := 0; i < test.count; i++ {
-					push(getTestValue(i))
-					push(getTestValue(i))
+					push(GetTestValue(i))
+					push(GetTestValue(i))
 					pop()
 				}
 
@@ -229,17 +229,17 @@ func (t *Benchmark) Microservice(b *testing.B, initInstance func(), push func(v 
 					if !empty() {
 						pop()
 					}
-					push(getTestValue(i))
+					push(GetTestValue(i))
 				}
 
 				// Simulate quick traffic spike (DDOS attack, etc)
 				for i := 0; i < test.count; i++ {
-					push(getTestValue(i))
+					push(GetTestValue(i))
 				}
 
 				// Simulate stable traffic while at high traffic
 				for i := 0; i < test.count; i++ {
-					push(getTestValue(i))
+					push(GetTestValue(i))
 					pop()
 				}
 
@@ -250,7 +250,7 @@ func (t *Benchmark) Microservice(b *testing.B, initInstance func(), push func(v 
 
 				// Simulate stable traffic (now that is back to normal)
 				for i := 0; i < test.count; i++ {
-					push(getTestValue(i))
+					push(GetTestValue(i))
 					pop()
 				}
 			}

@@ -25,11 +25,11 @@ type testData struct {
 	count int
 }
 
-// testValue is used as the value added in each push call to the queues.
+// TestValue is used as the value added in each push call to the queues.
 // A struct is being used as structs should be more representative of real
 // world uses of a queue. A second f2 field was added as the users structs
 // are likely to contain more than one field.
-type testValue struct {
+type TestValue struct {
 	count int
 	f2    int
 }
@@ -56,8 +56,9 @@ var (
 
 // Helper methods-----------------------------------------------------------------------------------
 
-func getTestValue(i int) *testValue {
-	return &testValue{
+// GetTestValue returns an initialized instance of *TestValue.
+func GetTestValue(i int) *TestValue {
+	return &TestValue{
 		count: i,
 		f2:    1, // Initializes f2 to some random value (1).
 	}
