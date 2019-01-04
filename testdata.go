@@ -20,11 +20,6 @@
 
 package benchmark
 
-// testData contains the number of items to add to the queues in each test.
-type testData struct {
-	count int
-}
-
 // TestValue is used as the value added in each push call to the queues.
 // A struct is being used as structs should be more representative of real
 // world uses of a queue. A second f2 field was added as the users structs
@@ -32,6 +27,11 @@ type testData struct {
 type TestValue struct {
 	count int
 	f2    int
+}
+
+// testData contains the number of items to add to the queues in each test.
+type testData struct {
+	count int
 }
 
 var (
