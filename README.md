@@ -31,7 +31,7 @@ import (
 
 func BenchmarkFillList(b *testing.B) {
 	var l *list.List
-	var tests benchmark.Benchmark
+	var tests benchmark.Tests
 	tests.Fill(
 		b,
 		func() {
