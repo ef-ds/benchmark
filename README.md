@@ -18,7 +18,7 @@ We recommend to target only released versions for production use.
 
 ## How to Use
 
-Below runs the benchmark [Fill](https://github.com/ef-ds/benchmark/blob/master/tests.go) tests using the standard [list package](https://github.com/golang/go/tree/master/src/container/list) as a LIFO stack.
+Below runs the benchmark [Fill](fill-test.go) tests using the standard [list package](https://github.com/golang/go/tree/master/src/container/list) as a LIFO stack.
 
 ```go
 package main
@@ -98,7 +98,7 @@ The test ranges are designed to test the data structures with different loads. T
 - 100000 items // 100k
 - 1000000 items // 1mi
 
-The 0 items test runs only for the [Fill](tests.go) and [Microservice](tests.go) tests and is designed to test the data structures initialization time only.
+The 0 items test runs only for the [Fill](fill-test.go) and [Microservice](microservice-test.go) tests and is designed to test the data structures initialization time only.
 
 
 ## Tests Type
