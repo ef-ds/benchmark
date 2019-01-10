@@ -22,50 +22,37 @@
 // and efficiency of data structures.
 package benchmark
 
-// Tests contains benchmark tests targeted to test the performance and efficiency of data structures.
-type Tests struct {
-}
-
-// TestValue is used as the value added in each push call to the queues.
-// A struct is being used as structs should be more representative of real
-// world uses of a queue. A second f2 field was added as the users structs
-// are likely to contain more than one field.
-type TestValue struct {
-	count int
-	f2    int
-}
-
-// testData contains the number of items to add to the queues in each test.
-type testData struct {
-	count int
-}
-
-var (
-	tests = []testData{
-		{count: 0},
-		{count: 1},
-		{count: 10},
-		{count: 100},
-		{count: 1000},    // 1k
-		{count: 10000},   //10k
-		{count: 100000},  // 100k
-		{count: 1000000}, // 1mi
-	}
-
-	// Used to store temp values, avoiding any compiler optimizations.
-	tmp  interface{}
-	tmp2 bool
-
-	fillCount   = 10000
-	refillCount = 100
+import (
+	"strconv"
+	"testing"
 )
 
-// Helper methods-----------------------------------------------------------------------------------
+// Stable tests the data structures performance by adding 1 item and removing it.
+// Stable  tests the data structures ability to handle constant add/remove over n iterations.
+func (t *Tests) Stable(b *testing.B, initInstance func(), add func(v interface{}), remove func() (interface{}, bool), empty func() bool) {
+	initInstance()
+	for i := 0; i < fillCount; i++ {
+		add(GetTestValue(i))
+	}
 
-// GetTestValue returns an initialized instance of *TestValue.
-func GetTestValue(i int) *TestValue {
-	return &TestValue{
-		count: i,
-		f2:    1, // Initializes f2 to some random value (1).
+	for i, test := range tests {
+		// Doesn't run the first (0 items) test as 0 items makes no sense for this test.
+		if i == 0 {
+			continue
+		}
+
+		b.Run(strconv.Itoa(test.count), func(b *testing.B) {
+			for n := 0; n < b.N; n++ {
+				for i := 0; i < test.count; i++ {
+					add(GetTestValue(i))
+					tmp, tmp2 = remove()
+				}
+
+			}
+		})
+	}
+
+	for !empty() {
+		tmp, tmp2 = remove()
 	}
 }

@@ -18,48 +18,38 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+// Package benchmark contains benchmark tests targeted to test the performance
+// and efficiency of data structures.
 package benchmark
 
-// TestValue is used as the value added in each push call to the queues.
-// A struct is being used as structs should be more representative of real
-// world uses of a queue. A second f2 field was added as the users structs
-// are likely to contain more than one field.
-type TestValue struct {
-	count int
-	f2    int
-}
-
-// testData contains the number of items to add to the queues in each test.
-type testData struct {
-	count int
-}
-
-var (
-	tests = []testData{
-		{count: 0},
-		{count: 1},
-		{count: 10},
-		{count: 100},
-		{count: 1000},    // 1k
-		{count: 10000},   //10k
-		{count: 100000},  // 100k
-		{count: 1000000}, // 1mi
-	}
-
-	// Used to store temp values, avoiding any compiler optimizations.
-	tmp  interface{}
-	tmp2 bool
-
-	fillCount   = 10000
-	refillCount = 100
+import (
+	"strconv"
+	"testing"
 )
 
-// Helper methods-----------------------------------------------------------------------------------
+// Refill test the data structures performance by sequentially adding n items to the data structure and then removing all added items
+// repeating the test 100 times using the same data structure instance.
+// Refill tests the data structures ability to fill again once it has been filled and emptied.
+func (t *Tests) Refill(b *testing.B, initInstance func(), add func(v interface{}), remove func() (interface{}, bool), empty func() bool) {
+	for i, test := range tests {
+		// Doesn't run the first (0 items) and last (1mi) items tests
+		// as 0 items makes no sense for this test and 1mi is too slow.
+		if i == 0 || i > 6 {
+			continue
+		}
 
-// GetTestValue returns an initialized instance of *TestValue.
-func GetTestValue(i int) *TestValue {
-	return &TestValue{
-		count: i,
-		f2:    1, // Initializes f2 to some random value (1).
+		b.Run(strconv.Itoa(test.count), func(b *testing.B) {
+			initInstance()
+			for n := 0; n < b.N; n++ {
+				for n := 0; n < refillCount; n++ {
+					for i := 0; i < test.count; i++ {
+						add(GetTestValue(i))
+					}
+					for !empty() {
+						tmp, tmp2 = remove()
+					}
+				}
+			}
+		})
 	}
 }

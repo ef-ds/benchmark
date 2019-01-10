@@ -57,12 +57,12 @@ The benchmark tests are composed of test suites and ranges.
 ## Test Suites
 The test suites were designed to test the data structures with different add/remove patterns under different scenarios such as low and high stress.
 
-- [Fill](tests.go): test the data structures performance by sequentially adding n items to the data structure and then removing all added items. Tests the data structures ability for quickly expand and shrink.
-- [Refill](tests.go): same test as Fill, but repeat the test 100 times using the same data structure instance. Tests the data structures ability to fill again once it has been filled and emptied.
-- [RefillFull](tests.go): same test as Refill, but before running the test, fills the data structures with n items to fill at least three internal slices. Tests the data structures ability to fill again once it has been filled and emptied back to a certain level (10k items).
-- [SlowIncrease](tests.go): test the data structures performance by sequentially adding 2 items and then removing 1. Tests the data structures ability to slowly expand while removing some elements from the data structure.
-- [SlowDecrease](tests.go): test the data structures performance by filling the data structures with n items to fill at least three internal slices, and then sequentially removing 2 items and adding 1. Tests the data structures ability to slowly shrink while adding some elements to the data structure.
-- [Stable](tests.go): Add 1 item to the data structure and remove it. Tests the data structures ability to handle constant push/pop over n iterations.
+- [Fill](fill-test.go): test the data structures performance by sequentially adding n items to the data structure and then removing all added items. Tests the data structures ability for quickly expand and shrink.
+- [Refill](refill-test.go): same test as Fill, but repeat the test 100 times using the same data structure instance. Tests the data structures ability to fill again once it has been filled and emptied.
+- [RefillFull](refill-full-test.go): same test as Refill, but before running the test, fills the data structures with n items to fill at least three internal slices. Tests the data structures ability to fill again once it has been filled and emptied back to a certain level (10k items).
+- [SlowIncrease](slow-increase-test.go): test the data structures performance by sequentially adding 2 items and then removing 1. Tests the data structures ability to slowly expand while removing some elements from the data structure.
+- [SlowDecrease](slow-decrease-test.go): test the data structures performance by filling the data structures with n items to fill at least three internal slices, and then sequentially removing 2 items and adding 1. Tests the data structures ability to slowly shrink while adding some elements to the data structure.
+- [Stable](stable-test.go): Add 1 item to the data structure and remove it. Tests the data structures ability to handle constant push/pop over n iterations.
 
 
 ### The Microservice Test
@@ -82,7 +82,7 @@ Next the test simulates the system handling the traffic going back to normal qui
 
 Finally, the test simulates the system handling the regular, stable, traffic again.
 
-The Microservice test can be found [here.](tests.go)
+The Microservice test can be found [here.](microservice-test.go)
 
 
 ## Test Ranges
