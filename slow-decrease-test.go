@@ -61,3 +61,40 @@ func (t *Tests) SlowDecrease(b *testing.B, initInstance func(), add func(v inter
 		tmp, tmp2 = remove()
 	}
 }
+
+// SlowDecreaseTestObject tests the data structures performance by sequentially adding 2 items and then removing 1.
+// SlowDecreaseTestObject tests the data structures ability to slowly expand while removing some elements from the data structure.
+// SlowDecreaseTestObject is a copy of SlowDecrease that operates on *TestValue object which allows data structures that suport
+// generics to not need to perform any type cast in the benchmark tests.
+func (t *Tests) SlowDecreaseTestObject(b *testing.B, initInstance func(), add func(v *TestValue), remove func() (*TestValue, bool), empty func() bool) {
+	initInstance()
+	for _, test := range tests {
+		items := test.count / 2
+		for i := 0; i <= items; i++ {
+			add(GetTestValue(i))
+		}
+	}
+
+	for i, test := range tests {
+		// Doesn't run the first (0 items) test as 0 items makes no sense for this test.
+		if i == 0 {
+			continue
+		}
+
+		b.Run(strconv.Itoa(test.count), func(b *testing.B) {
+			for n := 0; n < b.N; n++ {
+				for i := 0; i < test.count; i++ {
+					add(GetTestValue(i))
+					tmp, tmp2 = remove()
+					if !empty() {
+						tmp, tmp2 = remove()
+					}
+				}
+			}
+		})
+	}
+
+	for !empty() {
+		tmp, tmp2 = remove()
+	}
+}

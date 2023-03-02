@@ -8,11 +8,6 @@ From a configured [Go environment](https://golang.org/doc/install#testing):
 go get -u github.com/ef-ds/benchmark
 ```
 
-If you are using dep:
-```sh
-dep ensure -add github.com/ef-ds/benchmark@1.0.1
-```
-
 We recommend to target only released versions for production use.
 
 
