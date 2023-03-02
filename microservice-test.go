@@ -82,3 +82,61 @@ func (t *Tests) Microservice(b *testing.B, initInstance func(), add func(v inter
 		})
 	}
 }
+
+// MicroserviceTestObject tests the data structures performance by simulating the data structure being used by microservice
+// and serverless systems when running in production environments.
+// MicroserviceTestObject is a copy of Microservice that operates on *TestValue object which allows data structures that suport
+// generics to not need to perform any type cast in the benchmark tests.
+func (t *Tests) MicroserviceTestObject(b *testing.B, initInstance func(), add func(v *TestValue), remove func() (*TestValue, bool), empty func() bool) {
+	for _, test := range tests {
+		b.Run(strconv.Itoa(test.count), func(b *testing.B) {
+			for n := 0; n < b.N; n++ {
+				initInstance()
+
+				// Simulate stable traffic
+				for i := 0; i < test.count; i++ {
+					add(GetTestValue(i))
+					remove()
+				}
+
+				// Simulate slowly increasing traffic
+				for i := 0; i < test.count; i++ {
+					add(GetTestValue(i))
+					add(GetTestValue(i))
+					remove()
+				}
+
+				// Simulate slowly decreasing traffic, bringing traffic back to normal
+				for i := 0; i < test.count; i++ {
+					remove()
+					if !empty() {
+						remove()
+					}
+					add(GetTestValue(i))
+				}
+
+				// Simulate quick traffic spike (DDOS attack, etc)
+				for i := 0; i < test.count; i++ {
+					add(GetTestValue(i))
+				}
+
+				// Simulate stable traffic while at high traffic
+				for i := 0; i < test.count; i++ {
+					add(GetTestValue(i))
+					remove()
+				}
+
+				// Simulate going back to normal (DDOS attack fended off)
+				for i := 0; i < test.count; i++ {
+					remove()
+				}
+
+				// Simulate stable traffic (now that is back to normal)
+				for i := 0; i < test.count; i++ {
+					add(GetTestValue(i))
+					remove()
+				}
+			}
+		})
+	}
+}

@@ -52,3 +52,31 @@ func (t *Tests) SlowIncrease(b *testing.B, initInstance func(), add func(v inter
 		})
 	}
 }
+
+// SlowIncreaseTestObject tests the data structures performance by filling the data structures with n items, and then
+// sequentially removing 2 items and adding 1.
+// SlowIncreaseTestObject tests the data structures ability to slowly shrink while adding some elements to the data structure.
+// SlowIncreaseTestObject is a copy of SlowIncrease that operates on *TestValue object which allows data structures that suport
+// generics to not need to perform any type cast in the benchmark tests.
+func (t *Tests) SlowIncreaseTestObject(b *testing.B, initInstance func(), add func(v *TestValue), remove func() (*TestValue, bool), empty func() bool) {
+	for i, test := range tests {
+		// Doesn't run the first (0 items) test as 0 items makes no sense for this test.
+		if i == 0 {
+			continue
+		}
+
+		b.Run(strconv.Itoa(test.count), func(b *testing.B) {
+			for n := 0; n < b.N; n++ {
+				initInstance()
+				for i := 0; i < test.count; i++ {
+					add(GetTestValue(i))
+					add(GetTestValue(i))
+					tmp, tmp2 = remove()
+				}
+				for !empty() {
+					tmp, tmp2 = remove()
+				}
+			}
+		})
+	}
+}

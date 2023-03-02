@@ -44,3 +44,23 @@ func (t *Tests) Fill(b *testing.B, initInstance func(), add func(v interface{}),
 		})
 	}
 }
+
+// FillTestObject test the data structures performance by sequentially adding n items to the data structure and then removing all added items.
+// FillTestObject tests the data structures ability for quickly expand and shrink.
+// FillTestObject is a copy of Fill that operates on *TestValue object which allows data structures that suport
+// generics to not need to perform any type cast in the benchmark tests.
+func (t *Tests) FillTestObject(b *testing.B, initInstance func(), add func(v *TestValue), remove func() (*TestValue, bool), empty func() bool) {
+	for _, test := range tests {
+		b.Run(strconv.Itoa(test.count), func(b *testing.B) {
+			for n := 0; n < b.N; n++ {
+				initInstance()
+				for i := 0; i < test.count; i++ {
+					add(GetTestValue(i))
+				}
+				for !empty() {
+					tmp, tmp2 = remove()
+				}
+			}
+		})
+	}
+}

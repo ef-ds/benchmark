@@ -62,3 +62,41 @@ func (t *Tests) RefillFull(b *testing.B, initInstance func(), add func(v interfa
 		tmp, tmp2 = remove()
 	}
 }
+
+// RefillFullTestObject test the data structures performance by sequentially adding n items to the data structures and then removing all added items
+// repeating the test 100 times using the same data structure instance. But before running the test, fills the data structures
+// with n items.
+// RefillFullTestObject rests the data structures ability to fill again once it has been filled and emptied back to a certain level.
+// RefillFullTestObject is a copy of RefillFull that operates on *TestValue object which allows data structures that suport
+// generics to not need to perform any type cast in the benchmark tests.
+func (t *Tests) RefillFullTestObject(b *testing.B, initInstance func(), add func(v *TestValue), remove func() (*TestValue, bool), empty func() bool) {
+	initInstance()
+	for i := 0; i < fillCount; i++ {
+		add(GetTestValue(i))
+	}
+
+	for i, test := range tests {
+		// Doesn't run the first (0 items) and last (1mi) items tests
+		// as 0 items makes no sense for this test and 1mi is too slow.
+		if i == 0 || i > 6 {
+			continue
+		}
+
+		b.Run(strconv.Itoa(test.count), func(b *testing.B) {
+			for n := 0; n < b.N; n++ {
+				for k := 0; k < refillCount; k++ {
+					for i := 0; i < test.count; i++ {
+						add(GetTestValue(i))
+					}
+					for i := 0; i < test.count; i++ {
+						tmp, tmp2 = remove()
+					}
+				}
+			}
+		})
+	}
+
+	for !empty() {
+		tmp, tmp2 = remove()
+	}
+}
